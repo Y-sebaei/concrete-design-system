@@ -1,0 +1,77 @@
+{
+  "name": "@y-sebaei/concrete-ui",
+  "version": "0.1.0",
+  "description": "Concrete: an accessible React component library and design system for dense operator interfaces.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/concrete-ui.css",
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens": {
+      "types": "./dist/tokens/index.d.ts",
+      "import": "./dist/tokens/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Y-sebaei/concrete-design-system.git",
+    "directory": "packages/ui"
+  },
+  "keywords": [
+    "react",
+    "design-system",
+    "component-library",
+    "accessibility",
+    "aria",
+    "tailwind",
+    "storybook"
+  ],
+  "scripts": {
+    "tokens": "tsx src/tokens/generate.ts",
+    "tokens:check": "tsx src/tokens/generate.ts && git diff --exit-code -- src/styles/tokens.css",
+    "contrast": "tsx src/tokens/contrast.ts",
+    "build": "npm run tokens && vite build && tsc -p tsconfig.build.json",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "storybook:build": "storybook build -o storybook-static"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.5"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^8.4.7",
+    "@storybook/addon-docs": "^8.4.7",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-themes": "^8.4.7",
+    "@storybook/blocks": "^8.4.7",
+    "@storybook/react": "^8.4.7",
+    "@storybook/react-vite": "^8.4.7",
+    "@storybook/test": "^8.4.7",
+    "@tailwindcss/vite": "^4.0.0",
+    "storybook": "^8.4.7",
+    "tailwindcss": "^4.0.0",
+    "tsx": "^4.19.2",
+    "vite-plugin-dts": "^4.4.0"
+  }
+}

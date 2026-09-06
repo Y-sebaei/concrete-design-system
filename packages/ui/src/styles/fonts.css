@@ -1,0 +1,15 @@
+/*
+ * Optional. Pulls Schibsted Grotesk and Newsreader from Google Fonts.
+ *
+ * Both are variable fonts, and both are requested across their full weight
+ * range in one file each, so this is two requests rather than eight. Newsreader
+ * carries an optical size axis; the prose scale in scale.ts assumes it is
+ * active, which the `opsz` range below enables.
+ *
+ * Self-hosting is the better choice in production and the reason this file is a
+ * separate import rather than part of styles.css: dropping two woff2 files into
+ * your own assets and writing the two @font-face rules removes a third-party
+ * request from the critical path. The stacks in scale.ts fall back to the
+ * system UI sans and to Georgia, so a page that loads neither is still legible.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Schibsted+Grotesk:wght@400..700&display=swap');

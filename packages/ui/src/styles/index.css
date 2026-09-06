@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@import './tokens.css';
+@import './base.css';
+
+/*
+ * Tell Tailwind where the class names are. Without this the build scans the
+ * consuming project only, and every utility used inside a library component is
+ * dropped from the compiled stylesheet.
+ */
+@source '../';
