@@ -181,15 +181,13 @@ Tracking tightens as size grows, from +0.06em on the 11px label to -0.025em at
 scaled: letterforms at 41px have proportionally more space between them than the
 same forms at 15px, so leaving tracking at 0 makes every heading look loose.
 
-Lining tabular figures are the document default and prose opts out, rather than
-the other way round. Roughly half this system's surface area is digits in a
-column: prices, remaining inventory, totals, page numbers, timestamps.
-Proportional figures in a right-aligned column are the most common typographic
-defect in an operator interface.
+Numerals are proportional by default and tabular where they align. `Table`
+applies tabular figures to every numeric column and `Pagination` to the page
+numbers, which covers the places digits are actually read down a column.
 
 ## What the build proved wrong
 
-Five things were wrong. Four were found by running the thing rather than by
+Six things were wrong. Five were found by running the thing rather than by
 reading it, which is the argument for doing both.
 
 ### The contrast contract failed 14 of its first 108 pairs
@@ -239,6 +237,23 @@ Two overlaps and the page is permanently unscrollable, because the second lock
 saves `hidden` as the value to restore. It showed up as a test that failed
 about one run in three, which is the kind of thing that gets marked flaky and
 retried.
+
+### Tabular figures as a document default put a gap before every comma
+
+The first version set `font-variant-numeric: tabular-nums` on `html`, reasoning
+that roughly half an operator interface is digits in a column so the default
+should serve the common case.
+
+`tabular-nums` does not only affect digits. In most families the comma and the
+full stop are numeric separators, set to the same fixed advance so they align in
+a column of figures too. Applied to a whole document that puts a visible gap
+before every comma in every sentence: "Kreuzberg Jazz Sessions , 42 remaining".
+Ten pixels across a twenty-two character string, which is small enough to read
+as slightly loose spacing rather than as a defect.
+
+It was found by looking at the rendered type specimen in Storybook, which is
+the argument for building that page rather than listing the values. The default
+is now proportional and `.cui-tnum` opts in.
 
 ### The socket handler computed its diff inside a setState updater
 

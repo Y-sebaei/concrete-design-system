@@ -31,15 +31,29 @@
   }
 
   /*
-   * Digits line up in a column in roughly half of this system's surface area:
-   * prices, remaining inventory, order totals, page numbers, timestamps. So
-   * lining tabular figures are the default for the whole document and are
-   * turned off deliberately for running prose, rather than the other way
-   * round. Proportional figures in a right-aligned table column are the single
-   * most common typographic defect in an operator interface.
+   * NUMERALS ARE PROPORTIONAL BY DEFAULT, AND TABULAR WHERE THEY ALIGN.
+   *
+   * This was the other way round first, on the argument that roughly half of an
+   * operator interface is digits in a column and the default should serve the
+   * common case. That was wrong, and looking at a rendered type specimen is what
+   * showed it.
+   *
+   * `tabular-nums` does not only affect digits. In most families the comma and
+   * the full stop are numeric separators and are set to the same fixed advance,
+   * because they have to align in a column of figures too. Applied to the whole
+   * document that puts a visible gap before every comma in every sentence:
+   * "Kreuzberg Jazz Sessions , 42 remaining". The measured cost was ten pixels
+   * across a twenty-two character string, which is small enough to read as
+   * slightly-off spacing rather than as a bug.
+   *
+   * So the document default is proportional, and .cui-tnum opts in wherever
+   * digits are actually read down a column. Table applies it to every numeric
+   * column, and Pagination to the page numbers. Proportional figures in a
+   * right-aligned money column remain the most common typographic defect in an
+   * operator interface; this is just not the way to prevent it.
    */
   html {
-    font-variant-numeric: tabular-nums lining-nums;
+    font-variant-numeric: proportional-nums lining-nums;
   }
 
   button,
@@ -146,12 +160,12 @@
     text-wrap: pretty;
   }
 
-  /* Opt out of the document-level tabular default, for running text. */
+  /* Explicitly proportional, for a figure inside a .cui-tnum region. */
   .cui-pnum {
     font-variant-numeric: proportional-nums;
   }
 
-  /* Opt back in, for anything that escaped a .cui-prose block. */
+  /* Digits read down a column: money, counts, page numbers, timestamps. */
   .cui-tnum {
     font-variant-numeric: tabular-nums lining-nums;
   }

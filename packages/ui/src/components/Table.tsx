@@ -273,7 +273,10 @@ export function Table<Row, K extends string = string>({
                           className={cn(
                             'px-3 py-2.5 font-ui text-dense text-text',
                             (column.align === 'end' || column.numeric) && 'text-right',
-                            column.numeric && 'cui-tnum tabular-nums',
+                            // cui-tnum, not Tailwind's tabular-nums: the class
+                            // sets lining figures as well, and the utility would
+                            // override it with tabular alone.
+                            column.numeric && 'cui-tnum',
                             column.hideBelow && hideBelowClass[column.hideBelow],
                           )}
                         >

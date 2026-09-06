@@ -10,7 +10,7 @@ fails the build. The modal and the combobox are written by hand against the ARIA
 authoring practices rather than wrapped around a headless library.
 
 - **[DESIGN.md](DESIGN.md)** covers the direction, what was rejected, and the
-  five things the build proved wrong.
+  six things the build proved wrong.
 - **Storybook** documents every component and renders the palette, both type
   scales, the spacing ramp and the motion tokens as live specimens.
 
