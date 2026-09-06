@@ -53,37 +53,42 @@ export const light = {
   'accent-hover': ['moss', 600],
   'accent-active': ['moss', 700],
   'accent-text': ['moss', 600],
-  'accent-bg': ['moss', 50],
-  'accent-bg-hover': ['moss', 100],
-  'accent-border': ['moss', 200],
+  /* 100, not 50.
+     moss.50 has a relative luminance of 0.862 and surface-raised has 0.870, so
+     a row tinted with it was very slightly darker than the row beside it and
+     read as nothing at all. A tinted surface that cannot be told apart from the
+     surface underneath is not a subtle design, it is an absent one. */
+  'accent-bg': ['moss', 100],
+  'accent-bg-hover': ['moss', 200],
+  'accent-border': ['moss', 300],
 
   /* Danger. */
   danger: ['rust', 500],
   'danger-hover': ['rust', 600],
   'danger-active': ['rust', 700],
   'danger-text': ['rust', 600],
-  'danger-bg': ['rust', 50],
-  'danger-border': ['rust', 200],
+  'danger-bg': ['rust', 100],
+  'danger-border': ['rust', 300],
 
   /* Attention. */
   warning: ['amber', 500],
   'warning-text': ['amber', 700],
-  'warning-bg': ['amber', 50],
-  'warning-border': ['amber', 200],
+  'warning-bg': ['amber', 100],
+  'warning-border': ['amber', 300],
 
   /* Informational and live. */
   info: ['slate', 500],
   'info-text': ['slate', 600],
-  'info-bg': ['slate', 50],
-  'info-border': ['slate', 200],
+  'info-bg': ['slate', 100],
+  'info-border': ['slate', 300],
 
   /* Success reuses the primary accent on purpose: in a box office, "this
      worked" and "this is the house colour" are the same green, and a second
      unrelated green would be one green too many. */
   success: ['moss', 500],
   'success-text': ['moss', 600],
-  'success-bg': ['moss', 50],
-  'success-border': ['moss', 200],
+  'success-bg': ['moss', 100],
+  'success-border': ['moss', 300],
 
   /* Focus. See generate.ts for why the ring is drawn in two layers. */
   'focus-ring': ['moss', 700],
@@ -164,8 +169,17 @@ export type SemanticRole = keyof typeof light & keyof typeof dark;
 export interface ContrastRule {
   readonly fg: SemanticRole;
   readonly bg: SemanticRole;
-  /** 4.5 for body text, 3 for large text and for non-text boundaries. */
-  readonly min: 3 | 4.5;
+  /**
+   * 4.5 for body text and 3 for non-text boundaries, both from WCAG.
+   *
+   * 1.15 is not a WCAG threshold and is not presented as one. It is a design
+   * floor for a tinted surface: enough of a step that the tinted row is
+   * distinguishable from the row beside it. The tint is never the only signal
+   * for a state, because a step that small could not carry one on its own; the
+   * accent bar and the text colour do that work, and both are checked at 3 and
+   * 4.5 below.
+   */
+  readonly min: 1.15 | 3 | 4.5;
   readonly where: string;
 }
 
@@ -193,7 +207,7 @@ const litSurfaces = ['surface-app', 'surface-raised', 'surface-overlay'] as cons
 function on(
   bgs: readonly SemanticRole[],
   fg: SemanticRole,
-  min: 3 | 4.5,
+  min: 1.15 | 3 | 4.5,
   where: string,
 ): ContrastRule[] {
   return bgs.map((bg) => ({ fg, bg, min, where }));
@@ -252,4 +266,26 @@ export const contrastRules: readonly ContrastRule[] = [
   { fg: 'surface-raised', bg: 'accent', min: 3, where: 'inner focus ring, primary button on a card' },
   { fg: 'surface-raised', bg: 'danger', min: 3, where: 'inner focus ring, destructive button on a card' },
   { fg: 'focus-ring', bg: 'accent-bg', min: 3, where: 'focus ring on a selected combobox option' },
+
+  /*
+   * The state indicators.
+   *
+   * The bar down the left of an active combobox option, and the sort arrow on
+   * an active column header, are what actually communicate the state, so they
+   * carry the WCAG 1.4.11 requirement of 3:1 against the surface behind them.
+   * A tint alone cannot meet 3:1 without being dark enough to stop reading as a
+   * tint, which is why several design systems quietly fail this.
+   */
+  { fg: 'accent', bg: 'surface-overlay', min: 3, where: 'active option bar, in a listbox' },
+  { fg: 'accent', bg: 'surface-raised', min: 3, where: 'active option bar, on a card' },
+
+  /*
+   * The tints themselves, against the surfaces they are laid over. These use
+   * the design floor rather than a WCAG threshold, for the reason given on
+   * ContrastRule.min above.
+   */
+  { fg: 'accent-bg', bg: 'surface-overlay', min: 1.15, where: 'active or hovered listbox option' },
+  { fg: 'accent-bg', bg: 'surface-raised', min: 1.15, where: 'hovered table row' },
+  { fg: 'accent-bg-hover', bg: 'surface-overlay', min: 1.15, where: 'pressed ghost button on an overlay' },
+  { fg: 'info-bg', bg: 'surface-raised', min: 1.15, where: 'the flash on a row that just changed' },
 ];

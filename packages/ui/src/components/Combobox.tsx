@@ -571,7 +571,10 @@ export function Combobox({
                         'font-ui text-body',
                         'transition-colors duration-instant ease-standard',
                         option.disabled && 'cursor-not-allowed text-text-disabled',
-                        !option.disabled && isActive && 'bg-accent-bg text-accent-text',
+                        // cui-option-active carries the tint, the text colour
+                        // and the accent bar together. See base.css for why the
+                        // bar is not optional.
+                        !option.disabled && isActive && 'cui-option-active',
                         !option.disabled && !isActive && 'text-text',
                       )}
                     >

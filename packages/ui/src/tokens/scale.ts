@@ -116,8 +116,22 @@ export interface TypeStep {
   readonly tracking: number;
   readonly weight: number;
   readonly family: keyof typeof fonts;
-  readonly transform?: 'uppercase';
 }
+
+/*
+ * Casing is not part of a type step.
+ *
+ * The `label` step is usually set in caps, and it would be convenient to put
+ * that here. It is left out because Tailwind's type-scale variables carry size,
+ * leading, tracking and weight and have nowhere to put text-transform, so a
+ * `transform` field would be declared in the token source and silently dropped
+ * from the generated CSS. A token that half exists is worse than no token.
+ *
+ * The same 11px step also sets sentence-case captions in the Foundations pages,
+ * so casing genuinely belongs to the usage rather than to the step. Components
+ * that want caps add `uppercase` alongside `text-label`, and the tracking in
+ * the step is already set for caps because that is the dominant use.
+ */
 
 /**
  * Tracking tightens as size grows. This is the optical correction that makes a
@@ -127,7 +141,7 @@ export interface TypeStep {
  */
 export const text = {
   /* Interface scale, ratio 1.2. */
-  label: { size: 11, leading: 16, tracking: 0.06, weight: 600, family: 'ui', transform: 'uppercase' },
+  label: { size: 11, leading: 16, tracking: 0.06, weight: 600, family: 'ui' },
   dense: { size: 13, leading: 20, tracking: 0, weight: 400, family: 'ui' },
   body: { size: 15, leading: 22, tracking: 0, weight: 400, family: 'ui' },
   'body-lg': { size: 17, leading: 26, tracking: -0.005, weight: 400, family: 'ui' },

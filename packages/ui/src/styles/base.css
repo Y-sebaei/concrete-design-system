@@ -107,6 +107,27 @@
     box-shadow: 0 0 0 2px var(--ui-focus-ring-offset);
   }
 
+  /*
+   * THE ACTIVE OPTION IN A LISTBOX
+   *
+   * Three cues, and the bar is the one that counts.
+   *
+   * A tint alone cannot carry this state. The tint that reads as a tint sits
+   * around 1.2:1 against the surface under it, and WCAG 1.4.11 asks for 3:1
+   * from anything that identifies a component state. Pushing the tint until it
+   * clears 3:1 turns it into a solid fill and the option stops looking like an
+   * option. So the state is carried by a 2px bar in the full accent, which
+   * clears 3:1 comfortably, and the tint and the text colour reinforce it.
+   *
+   * An inset box-shadow rather than a border, because a border would move the
+   * option's text by two pixels as the highlight walks down the list.
+   */
+  .cui-option-active {
+    background-color: var(--ui-accent-bg);
+    color: var(--ui-accent-text);
+    box-shadow: inset 2px 0 0 0 var(--ui-accent);
+  }
+
   /* Prose. Newsreader, one measure, proportional figures. */
   .cui-prose {
     font-family: var(--font-prose);
