@@ -22,7 +22,15 @@ type Story = StoryObj;
 /* Shared page furniture                                                       */
 /* -------------------------------------------------------------------------- */
 
-function Page({ title, lede, children }: { title: string; lede: string; children: React.ReactNode }) {
+function Page({
+  title,
+  lede,
+  children,
+}: {
+  title: string;
+  lede: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="min-h-screen bg-surface-app p-8">
       <header className="mb-8">
@@ -34,11 +42,23 @@ function Page({ title, lede, children }: { title: string; lede: string; children
   );
 }
 
-function Section({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
+function Section({
+  title,
+  note,
+  children,
+}: {
+  title: string;
+  note?: string;
+  children: React.ReactNode;
+}) {
   return (
     <section>
       <h2 className="font-ui text-title text-text">{title}</h2>
-      {note ? <p className="cui-prose mt-2 mb-4 text-text-subtle">{note}</p> : <div className="mb-4" />}
+      {note ? (
+        <p className="cui-prose mt-2 mb-4 text-text-subtle">{note}</p>
+      ) : (
+        <div className="mb-4" />
+      )}
       {children}
     </section>
   );
@@ -94,13 +114,26 @@ function SemanticTable() {
 
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-surface-raised">
-      <div className="w-full overflow-x-auto" tabIndex={0} role="group" aria-label="Semantic roles, scrollable">
+      {/* A focusable scroll container, for the reason given in Table.tsx. */}
+      <div
+        className="w-full overflow-x-auto"
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+        tabIndex={0}
+        role="group"
+        aria-label="Semantic roles, scrollable"
+      >
         <table className="w-full border-collapse text-left">
-          <caption className="sr-only">Every semantic role, with the ramp step it resolves to in each theme</caption>
+          <caption className="sr-only">
+            Every semantic role, with the ramp step it resolves to in each theme
+          </caption>
           <thead>
             <tr className="border-b border-border bg-surface-sunken">
               {['Role', 'Light', 'Dark'].map((header) => (
-                <th key={header} scope="col" className="px-3 py-2 font-ui text-label text-text-muted">
+                <th
+                  key={header}
+                  scope="col"
+                  className="px-3 py-2 font-ui text-label text-text-muted"
+                >
                   {header}
                 </th>
               ))}
@@ -141,7 +174,6 @@ function SemanticTable() {
 }
 
 export const Colour: Story = {
-  name: 'Colour',
   render: () => (
     <Page
       title="Colour"
@@ -181,7 +213,10 @@ export const Colour: Story = {
                 <span className="font-ui text-dense" style={{ color: resolve(light[rule.fg]) }}>
                   {rule.fg} on {rule.bg}
                 </span>
-                <span className="cui-tnum font-mono text-[11px]" style={{ color: resolve(light[rule.fg]) }}>
+                <span
+                  className="cui-tnum font-mono text-[11px]"
+                  style={{ color: resolve(light[rule.fg]) }}
+                >
                   {ratio.toFixed(2)}:1
                 </span>
               </div>

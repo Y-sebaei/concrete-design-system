@@ -281,7 +281,10 @@ function ToastViewport({
               'motion-safe:animate-[cui-slide-in_var(--duration-medium)_var(--ease-enter)]',
             )}
           >
-            <span aria-hidden="true" className={cn('w-1 shrink-0 rounded-full', tones[toast.tone].bar)} />
+            <span
+              aria-hidden="true"
+              className={cn('w-1 shrink-0 rounded-full', tones[toast.tone].bar)}
+            />
 
             <div className="min-w-0 flex-1">
               <p className="font-ui text-body font-medium text-text">{toast.title}</p>

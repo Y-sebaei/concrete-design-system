@@ -105,7 +105,12 @@ export const Playground: Story = {
         >
           <dl className="grid grid-cols-2 gap-4">
             {[
-              ['Status', <Badge key="s" tone="success" dot>Paid</Badge>],
+              [
+                'Status',
+                <Badge key="s" tone="success" dot>
+                  Paid
+                </Badge>,
+              ],
               ['Customer', 'ada@example.berlin'],
               ['Total', '49.80 EUR'],
               ['Paid at', '12 March, 20:14'],

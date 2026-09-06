@@ -34,10 +34,7 @@ describe('the contrast contract', () => {
   it.each(results)(
     '$theme: $fg on $bg is at least $min to 1 ($where)',
     ({ ratio, min, pass, fgHex, bgHex }) => {
-      expect(
-        pass,
-        `${fgHex} on ${bgHex} is ${ratio.toFixed(2)}:1, needs ${min}:1`,
-      ).toBe(true);
+      expect(pass, `${fgHex} on ${bgHex} is ${ratio.toFixed(2)}:1, needs ${min}:1`).toBe(true);
     },
   );
 });

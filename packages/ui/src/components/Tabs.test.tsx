@@ -14,7 +14,13 @@ const items: TabItem[] = [
 function Harness({ activation }: { activation?: 'automatic' | 'manual' }) {
   const [value, setValue] = useState('events');
   return (
-    <Tabs items={items} value={value} onChange={setValue} label="Console sections" activation={activation}>
+    <Tabs
+      items={items}
+      value={value}
+      onChange={setValue}
+      label="Console sections"
+      activation={activation}
+    >
       <TabPanel value="events">Events panel</TabPanel>
       <TabPanel value="orders">Orders panel</TabPanel>
       <TabPanel value="refunds">Refunds panel</TabPanel>

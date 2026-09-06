@@ -90,7 +90,13 @@ function Demo() {
       <div className="mt-4 flex flex-wrap gap-2">
         <Button
           variant="secondary"
-          onClick={() => toast({ title: 'Holds released', description: 'Six seats returned to inventory.', tone: 'success' })}
+          onClick={() =>
+            toast({
+              title: 'Holds released',
+              description: 'Six seats returned to inventory.',
+              tone: 'success',
+            })
+          }
         >
           Success
         </Button>
@@ -158,9 +164,9 @@ function ReconnectDemo() {
     <Card className="max-w-lg">
       <p className="font-ui text-title text-text">A socket reconnecting</p>
       <p className="cui-prose mt-2 text-text-subtle">
-        Press this several times. Because every message shares a key, the eighth attempt updates
-        the first toast in place instead of building a column of identical messages. This is the
-        reason the key option exists.
+        Press this several times. Because every message shares a key, the eighth attempt updates the
+        first toast in place instead of building a column of identical messages. This is the reason
+        the key option exists.
       </p>
       <Button
         className="mt-4"

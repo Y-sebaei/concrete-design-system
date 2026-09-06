@@ -74,16 +74,8 @@ function SortIcon({ direction }: { direction: SortDirection | null }) {
       height="12"
       className={cn('shrink-0', direction ? 'text-accent-text' : 'text-text-disabled')}
     >
-      <path
-        d="M5 1.5 8 5H2z"
-        fill="currentColor"
-        opacity={direction === 'desc' ? 0.25 : 1}
-      />
-      <path
-        d="M5 10.5 2 7h6z"
-        fill="currentColor"
-        opacity={direction === 'asc' ? 0.25 : 1}
-      />
+      <path d="M5 1.5 8 5H2z" fill="currentColor" opacity={direction === 'desc' ? 0.25 : 1} />
+      <path d="M5 10.5 2 7h6z" fill="currentColor" opacity={direction === 'asc' ? 0.25 : 1} />
     </svg>
   );
 }
@@ -154,8 +146,15 @@ export function Table<Row, K extends string = string>({
         is not: this is WCAG 2.1.1, and it is the single most common failure in
         responsive data tables.
       */}
+      {/*
+        The rule below is wrong for a scroll container. WCAG 2.1.1 requires a
+        region that scrolls to be operable from the keyboard, and a div with
+        overflow-x and no tabindex cannot be scrolled without a pointer. The
+        role and the label are what stop it being an unexplained tab stop.
+      */}
       <div
         className="w-full overflow-x-auto"
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
         tabIndex={0}
         role="group"
         aria-label={`${caption}, scrollable`}
@@ -163,7 +162,9 @@ export function Table<Row, K extends string = string>({
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">
             {caption}
-            {sort ? `, sorted by ${sort.key} ${sort.direction === 'asc' ? 'ascending' : 'descending'}` : ''}
+            {sort
+              ? `, sorted by ${sort.key} ${sort.direction === 'asc' ? 'ascending' : 'descending'}`
+              : ''}
           </caption>
 
           <thead>
@@ -285,8 +286,23 @@ export function Table<Row, K extends string = string>({
             height="32"
             className="text-border-strong"
           >
-            <rect x="0.75" y="0.75" width="46.5" height="30.5" rx="3" fill="none" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M0.75 9.5h46.5M16 9.5V31M32 9.5V31" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.55" />
+            <rect
+              x="0.75"
+              y="0.75"
+              width="46.5"
+              height="30.5"
+              rx="3"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M0.75 9.5h46.5M16 9.5V31M32 9.5V31"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              opacity="0.55"
+            />
           </svg>
 
           <p className="mt-2 font-ui text-body font-medium text-text">{empty.title}</p>

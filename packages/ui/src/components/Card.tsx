@@ -59,7 +59,10 @@ export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
 export function CardHeader({ actions, className, children, ...rest }: CardHeaderProps) {
   return (
     <div
-      className={cn('flex items-start justify-between gap-4 border-b border-border pb-3', className)}
+      className={cn(
+        'flex items-start justify-between gap-4 border-b border-border pb-3',
+        className,
+      )}
       {...rest}
     >
       <div className="min-w-0">{children}</div>
@@ -69,6 +72,9 @@ export function CardHeader({ actions, className, children, ...rest }: CardHeader
 }
 
 export function CardTitle({ className, ...rest }: HTMLAttributes<HTMLHeadingElement>) {
+  // Children arrive through the spread, which the rule cannot see. The heading
+  // is empty only if the caller renders it empty, and that is the caller's bug.
+  // eslint-disable-next-line jsx-a11y/heading-has-content
   return <h3 className={cn('font-ui text-title text-text', className)} {...rest} />;
 }
 

@@ -10,7 +10,15 @@ const preview: Preview = {
       storySort: {
         order: [
           'Foundations',
-          ['Introduction', 'Colour', 'Typography', 'Spacing', 'Radius and elevation', 'Motion', 'Focus'],
+          [
+            'Introduction',
+            'Colour',
+            'Typography',
+            'Spacing',
+            'Radius and elevation',
+            'Motion',
+            'Focus',
+          ],
           'Components',
         ],
       },

@@ -19,7 +19,13 @@ const rows: Event[] = [
 const columns: TableColumn<Event>[] = [
   { key: 'title', header: 'Event', cell: (row) => row.title },
   { key: 'city', header: 'City', cell: (row) => row.city },
-  { key: 'remaining', header: 'Remaining', cell: (row) => row.remaining, numeric: true, sortable: true },
+  {
+    key: 'remaining',
+    header: 'Remaining',
+    cell: (row) => row.remaining,
+    numeric: true,
+    sortable: true,
+  },
 ];
 
 const empty = {
@@ -71,9 +77,9 @@ describe('Table', () => {
 
     const remaining = screen.getByRole('columnheader', { name: /Remaining/ });
     expect(remaining).toHaveAttribute('aria-sort', 'ascending');
-    expect(
-      screen.getByRole('columnheader', { name: 'Event' }).hasAttribute('aria-sort'),
-    ).toBe(false);
+    expect(screen.getByRole('columnheader', { name: 'Event' }).hasAttribute('aria-sort')).toBe(
+      false,
+    );
 
     await user.click(screen.getByRole('button', { name: /Remaining/ }));
     expect(remaining).toHaveAttribute('aria-sort', 'descending');

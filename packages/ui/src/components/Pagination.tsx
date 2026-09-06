@@ -86,11 +86,7 @@ export function Pagination({
       aria-label={label}
       className={cn('flex flex-wrap items-center justify-between gap-3', className)}
     >
-      {totalLabel ? (
-        <p className="font-ui text-dense text-text-subtle">{totalLabel}</p>
-      ) : (
-        <span />
-      )}
+      {totalLabel ? <p className="font-ui text-dense text-text-subtle">{totalLabel}</p> : <span />}
 
       <div className="flex items-center gap-1">
         <button

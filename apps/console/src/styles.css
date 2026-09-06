@@ -1,0 +1,22 @@
+/*
+ * The console's stylesheet.
+ *
+ * One Tailwind pass compiles the library's classes and the console's together,
+ * against a single token layer. @source points the scanner at the library
+ * source, which is what stops the compiled CSS dropping every utility that only
+ * appears inside a component.
+ *
+ * A consumer outside this workspace does the equivalent with two imports:
+ *
+ *   @import '@y-sebaei/concrete-ui/tokens.css';
+ *   @import '@y-sebaei/concrete-ui/styles.css';
+ *
+ * and needs no Tailwind of its own. See the README.
+ */
+@import 'tailwindcss';
+@import '../../../packages/ui/src/styles/fonts.css';
+@import '../../../packages/ui/src/styles/tokens.css';
+@import '../../../packages/ui/src/styles/base.css';
+
+@source '../../../packages/ui/src';
+@source './';

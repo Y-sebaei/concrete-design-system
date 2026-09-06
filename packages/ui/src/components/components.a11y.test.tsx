@@ -112,7 +112,12 @@ describe('accessibility, form controls', () => {
       <div>
         <Input label="Search events" placeholder="Title or venue" />
         <Input label="Quantity" numeric hint="Up to ten per order" defaultValue="2" />
-        <Input label="Email" error="That address is not valid." required defaultValue="not-an-email" />
+        <Input
+          label="Email"
+          error="That address is not valid."
+          required
+          defaultValue="not-an-email"
+        />
         <Input label="Locked" disabled defaultValue="x" />
       </div>,
     );

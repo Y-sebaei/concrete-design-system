@@ -202,7 +202,11 @@ const allSurfaces = [
   'surface-sunken',
 ] as const satisfies readonly SemanticRole[];
 
-const litSurfaces = ['surface-app', 'surface-raised', 'surface-overlay'] as const satisfies readonly SemanticRole[];
+const litSurfaces = [
+  'surface-app',
+  'surface-raised',
+  'surface-overlay',
+] as const satisfies readonly SemanticRole[];
 
 function on(
   bgs: readonly SemanticRole[],
@@ -238,7 +242,12 @@ export const contrastRules: readonly ContrastRule[] = [
   { fg: 'text-on-accent', bg: 'accent-active', min: 4.5, where: 'primary button label, active' },
   { fg: 'text-on-accent', bg: 'danger', min: 4.5, where: 'destructive button label' },
   { fg: 'text-on-accent', bg: 'danger-hover', min: 4.5, where: 'destructive button label, hover' },
-  { fg: 'text-on-accent', bg: 'danger-active', min: 4.5, where: 'destructive button label, active' },
+  {
+    fg: 'text-on-accent',
+    bg: 'danger-active',
+    min: 4.5,
+    where: 'destructive button label, active',
+  },
 
   /* Tinted status surfaces. */
   { fg: 'accent-text', bg: 'accent-bg', min: 4.5, where: 'accent badge, selected combobox option' },
@@ -262,9 +271,24 @@ export const contrastRules: readonly ContrastRule[] = [
    * threshold, which quietly removes the check that was working.
    */
   { fg: 'surface-app', bg: 'accent', min: 3, where: 'inner focus ring on a filled primary button' },
-  { fg: 'surface-app', bg: 'danger', min: 3, where: 'inner focus ring on a filled destructive button' },
-  { fg: 'surface-raised', bg: 'accent', min: 3, where: 'inner focus ring, primary button on a card' },
-  { fg: 'surface-raised', bg: 'danger', min: 3, where: 'inner focus ring, destructive button on a card' },
+  {
+    fg: 'surface-app',
+    bg: 'danger',
+    min: 3,
+    where: 'inner focus ring on a filled destructive button',
+  },
+  {
+    fg: 'surface-raised',
+    bg: 'accent',
+    min: 3,
+    where: 'inner focus ring, primary button on a card',
+  },
+  {
+    fg: 'surface-raised',
+    bg: 'danger',
+    min: 3,
+    where: 'inner focus ring, destructive button on a card',
+  },
   { fg: 'focus-ring', bg: 'accent-bg', min: 3, where: 'focus ring on a selected combobox option' },
 
   /*
@@ -286,6 +310,11 @@ export const contrastRules: readonly ContrastRule[] = [
    */
   { fg: 'accent-bg', bg: 'surface-overlay', min: 1.15, where: 'active or hovered listbox option' },
   { fg: 'accent-bg', bg: 'surface-raised', min: 1.15, where: 'hovered table row' },
-  { fg: 'accent-bg-hover', bg: 'surface-overlay', min: 1.15, where: 'pressed ghost button on an overlay' },
+  {
+    fg: 'accent-bg-hover',
+    bg: 'surface-overlay',
+    min: 1.15,
+    where: 'pressed ghost button on an overlay',
+  },
   { fg: 'info-bg', bg: 'surface-raised', min: 1.15, where: 'the flash on a row that just changed' },
 ];

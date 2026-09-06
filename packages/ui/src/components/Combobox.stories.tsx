@@ -7,7 +7,12 @@ const cities: ComboboxOption[] = [
   { value: 'bern', label: 'Bern', description: 'Switzerland' },
   { value: 'bremen', label: 'Bremen', description: 'Germany' },
   { value: 'cologne', label: 'Cologne', description: 'Germany' },
-  { value: 'dresden', label: 'Dresden', description: 'Germany, no events scheduled', disabled: true },
+  {
+    value: 'dresden',
+    label: 'Dresden',
+    description: 'Germany, no events scheduled',
+    disabled: true,
+  },
   { value: 'hamburg', label: 'Hamburg', description: 'Germany' },
   { value: 'leipzig', label: 'Leipzig', description: 'Germany' },
   { value: 'munich', label: 'Munich', description: 'Germany' },
@@ -123,13 +128,10 @@ export const Playground: Story = {
 
 export const WithHint: Story = {
   name: 'With a hint',
-  render: (args) => (
-    <Controlled {...args} hint="Only cities with a published event are listed." />
-  ),
+  render: (args) => <Controlled {...args} hint="Only cities with a published event are listed." />,
 };
 
 export const Error: Story = {
-  name: 'Error',
   render: (args) => (
     <Controlled
       {...args}

@@ -107,9 +107,9 @@ describe('Combobox, keyboard', () => {
     await user.keyboard('{ArrowDown}');
 
     expect(screen.getByRole('listbox')).toBeInTheDocument();
-    expect(document.getElementById(input().getAttribute('aria-activedescendant')!)).toHaveTextContent(
-      'Berlin',
-    );
+    expect(
+      document.getElementById(input().getAttribute('aria-activedescendant')!),
+    ).toHaveTextContent('Berlin');
   });
 
   it('opens on ArrowUp and highlights the last option', async () => {
@@ -119,9 +119,9 @@ describe('Combobox, keyboard', () => {
     input().focus();
     await user.keyboard('{ArrowUp}');
 
-    expect(document.getElementById(input().getAttribute('aria-activedescendant')!)).toHaveTextContent(
-      'Hamburg',
-    );
+    expect(
+      document.getElementById(input().getAttribute('aria-activedescendant')!),
+    ).toHaveTextContent('Hamburg');
   });
 
   it('opens on Alt+ArrowDown without moving the highlight', async () => {
@@ -142,14 +142,14 @@ describe('Combobox, keyboard', () => {
     input().focus();
     // Berlin, Bern, Bremen, Cologne, then Dresden is disabled so Hamburg.
     await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}');
-    expect(document.getElementById(input().getAttribute('aria-activedescendant')!)).toHaveTextContent(
-      'Cologne',
-    );
+    expect(
+      document.getElementById(input().getAttribute('aria-activedescendant')!),
+    ).toHaveTextContent('Cologne');
 
     await user.keyboard('{ArrowDown}');
-    expect(document.getElementById(input().getAttribute('aria-activedescendant')!)).toHaveTextContent(
-      'Hamburg',
-    );
+    expect(
+      document.getElementById(input().getAttribute('aria-activedescendant')!),
+    ).toHaveTextContent('Hamburg');
   });
 
   it('wraps from the last option to the first', async () => {
@@ -158,9 +158,9 @@ describe('Combobox, keyboard', () => {
 
     input().focus();
     await user.keyboard('{ArrowUp}{ArrowDown}');
-    expect(document.getElementById(input().getAttribute('aria-activedescendant')!)).toHaveTextContent(
-      'Berlin',
-    );
+    expect(
+      document.getElementById(input().getAttribute('aria-activedescendant')!),
+    ).toHaveTextContent('Berlin');
   });
 
   it('commits the highlighted option on Enter and closes', async () => {
@@ -276,7 +276,9 @@ describe('Combobox, filtering and announcements', () => {
       const [value, setValue] = useState<string | null>(null);
       // The "server" matched on a field this component cannot see.
       const results: ComboboxOption[] =
-        query.length > 0 ? [{ value: 'ord-1', label: 'Order 4d1f', description: 'ada@example.com' }] : [];
+        query.length > 0
+          ? [{ value: 'ord-1', label: 'Order 4d1f', description: 'ada@example.com' }]
+          : [];
 
       return (
         <Combobox

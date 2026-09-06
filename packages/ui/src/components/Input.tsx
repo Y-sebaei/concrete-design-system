@@ -10,8 +10,7 @@ import {
 } from './Field';
 
 export interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'className'>,
-    FieldOwnProps {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'className'>, FieldOwnProps {
   size?: ControlSize;
   /** Rendered inside the well, before the text. Decorative. */
   iconStart?: ReactNode;

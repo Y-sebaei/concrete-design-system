@@ -45,11 +45,17 @@ describe('Button', () => {
     });
 
     it('reports itself busy and announces the state', () => {
-      render(<Button loading loadingLabel="Refunding">Refund</Button>);
+      render(
+        <Button loading loadingLabel="Refunding">
+          Refund
+        </Button>,
+      );
       const button = screen.getByRole('button', { name: /Refund/ });
 
       expect(button).toHaveAttribute('aria-busy', 'true');
-      expect(button).toHaveAccessibleName(expect.stringContaining('Refunding') as unknown as string);
+      expect(button).toHaveAccessibleName(
+        expect.stringContaining('Refunding') as unknown as string,
+      );
     });
 
     it('does not fire onClick', async () => {
@@ -88,9 +94,7 @@ describe('Button', () => {
   });
 
   it('hides decorative icons from assistive technology', () => {
-    render(
-      <Button iconStart={<svg data-testid="icon" />}>Export</Button>,
-    );
+    render(<Button iconStart={<svg data-testid="icon" />}>Export</Button>);
     expect(screen.getByTestId('icon').parentElement).toHaveAttribute('aria-hidden', 'true');
   });
 });

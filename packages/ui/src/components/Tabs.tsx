@@ -132,6 +132,14 @@ export function Tabs({
   return (
     <TabsContext.Provider value={context}>
       <div className={className}>
+        {/*
+          eslint-disable-next-line jsx-a11y/interactive-supports-focus --
+          a tablist is not focusable and must not be. The ARIA tabs pattern puts
+          exactly one tab in the tab order and moves between them with the arrow
+          keys, so the handler is here as a delegate for keys pressed on the
+          focused tab inside. Adding tabindex to the tablist would create a stop
+          that does nothing, immediately before the tab that does.
+        */}
         <div
           ref={listRef}
           role="tablist"

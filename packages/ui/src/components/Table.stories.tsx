@@ -16,12 +16,66 @@ interface Row {
 }
 
 const data: Row[] = [
-  { id: '1', title: 'Kreuzberg Jazz Sessions', venue: 'Prachtwerk', city: 'Berlin', startsAt: '12 Mar, 21:00', status: 'published', remaining: 42, capacity: 200 },
-  { id: '2', title: 'Hafenklang Late', venue: 'Hafenklang', city: 'Hamburg', startsAt: '14 Mar, 23:00', status: 'published', remaining: 0, capacity: 350 },
-  { id: '3', title: 'Conne Island Allnighter', venue: 'Conne Island', city: 'Leipzig', startsAt: '15 Mar, 22:00', status: 'published', remaining: 118, capacity: 400 },
-  { id: '4', title: 'Blitz Opening', venue: 'Blitz', city: 'Munich', startsAt: '21 Mar, 23:30', status: 'draft', remaining: 500, capacity: 500 },
-  { id: '5', title: 'Gretchen Bass Night', venue: 'Gretchen', city: 'Berlin', startsAt: '22 Mar, 23:00', status: 'cancelled', remaining: 0, capacity: 300 },
-  { id: '6', title: 'Uebel und Gefaehrlich', venue: 'Uebel', city: 'Hamburg', startsAt: '28 Mar, 22:00', status: 'published', remaining: 7, capacity: 250 },
+  {
+    id: '1',
+    title: 'Kreuzberg Jazz Sessions',
+    venue: 'Prachtwerk',
+    city: 'Berlin',
+    startsAt: '12 Mar, 21:00',
+    status: 'published',
+    remaining: 42,
+    capacity: 200,
+  },
+  {
+    id: '2',
+    title: 'Hafenklang Late',
+    venue: 'Hafenklang',
+    city: 'Hamburg',
+    startsAt: '14 Mar, 23:00',
+    status: 'published',
+    remaining: 0,
+    capacity: 350,
+  },
+  {
+    id: '3',
+    title: 'Conne Island Allnighter',
+    venue: 'Conne Island',
+    city: 'Leipzig',
+    startsAt: '15 Mar, 22:00',
+    status: 'published',
+    remaining: 118,
+    capacity: 400,
+  },
+  {
+    id: '4',
+    title: 'Blitz Opening',
+    venue: 'Blitz',
+    city: 'Munich',
+    startsAt: '21 Mar, 23:30',
+    status: 'draft',
+    remaining: 500,
+    capacity: 500,
+  },
+  {
+    id: '5',
+    title: 'Gretchen Bass Night',
+    venue: 'Gretchen',
+    city: 'Berlin',
+    startsAt: '22 Mar, 23:00',
+    status: 'cancelled',
+    remaining: 0,
+    capacity: 300,
+  },
+  {
+    id: '6',
+    title: 'Uebel und Gefaehrlich',
+    venue: 'Uebel',
+    city: 'Hamburg',
+    startsAt: '28 Mar, 22:00',
+    status: 'published',
+    remaining: 7,
+    capacity: 250,
+  },
 ];
 
 const statusTone = {
@@ -59,7 +113,8 @@ const columns: TableColumn<Row>[] = [
 
 const empty = {
   title: 'No events match these filters',
-  description: 'Clear the city filter or widen the date range. Draft events are never listed here, because the catalogue API only returns published ones.',
+  description:
+    'Clear the city filter or widen the date range. Draft events are never listed here, because the catalogue API only returns published ones.',
 };
 
 const meta = {

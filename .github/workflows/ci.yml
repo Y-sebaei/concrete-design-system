@@ -1,0 +1,133 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  # Cheapest first, and deliberately its own job.
+  #
+  # The contrast contract needs no browser, no DOM and no rendering: it reads
+  # the token source and does arithmetic over both themes. It catches the class
+  # of failure that is hardest to see by eye, which is a dark theme one ramp
+  # step short of legible, and it does it in about two seconds. Failing here
+  # means nothing further is worth running.
+  tokens:
+    name: Tokens and contrast
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      - name: Contrast contract, both themes
+        run: npm run contrast
+
+      # The generated stylesheet is committed, so this proves it matches the
+      # TypeScript it was generated from. Without it, somebody editing a hex
+      # value straight into the CSS would desynchronise it from the source of
+      # truth and nothing would notice.
+      - name: Generated tokens are up to date
+        run: npm run tokens:check
+
+  lint:
+    name: Lint and types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format:check
+
+  test:
+    name: Unit and accessibility
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      - name: Behaviour
+        run: npx vitest run --project unit --project tokens
+
+      # Its own step so the job summary distinguishes a component that stopped
+      # working from one that started excluding someone. Mixed into one suite,
+      # an axe regression gets triaged like any other broken test.
+      - name: Accessibility, axe
+        run: npx vitest run --project a11y
+
+  build:
+    name: Build the package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      # Proves the published artefact, which the console does not: the console
+      # consumes the library by source through a workspace alias.
+      - name: Library
+        run: npm run build -w @y-sebaei/concrete-ui
+
+      - name: The built package contains what package.json promises
+        run: |
+          test -f packages/ui/dist/index.js
+          test -f packages/ui/dist/index.d.ts
+          test -f packages/ui/dist/concrete-ui.css
+          grep -q -- '--ui-surface-app' packages/ui/dist/concrete-ui.css
+          grep -q 'prefers-color-scheme:dark' packages/ui/dist/concrete-ui.css
+
+      - name: Console
+        run: npm run build -w boxoffice-console
+
+  e2e:
+    name: Keyboard end to end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      - name: Install browsers
+        run: npx playwright install --with-deps chromium firefox
+
+      # Playwright runs against a built Storybook rather than the console, so
+      # the run is hermetic: no ticketing API, no docker compose, no seed data.
+      # A red run is a real regression rather than a cold stack.
+      - name: Build Storybook
+        run: npm run storybook:build
+
+      - name: Modal and combobox, keyboard only
+        run: npx playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

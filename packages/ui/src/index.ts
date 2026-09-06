@@ -1,12 +1,7 @@
 import './styles/index.css';
 
 export { Badge, type BadgeProps, type BadgeTone, type BadgeShape } from './components/Badge';
-export {
-  Button,
-  type ButtonProps,
-  type ButtonVariant,
-  type ButtonSize,
-} from './components/Button';
+export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './components/Button';
 export {
   Card,
   CardHeader,
@@ -31,7 +26,13 @@ export {
   type SortState,
   type SortDirection,
 } from './components/Table';
-export { Tabs, TabPanel, type TabsProps, type TabPanelProps, type TabItem } from './components/Tabs';
+export {
+  Tabs,
+  TabPanel,
+  type TabsProps,
+  type TabPanelProps,
+  type TabItem,
+} from './components/Tabs';
 export {
   ToastProvider,
   useToast,

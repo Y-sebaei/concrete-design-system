@@ -65,9 +65,7 @@ describe('Modal', () => {
     render(<Harness />);
     await user.click(screen.getByRole('button', { name: 'Open order' }));
 
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Close dialog' })).toHaveFocus(),
-    );
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Close dialog' })).toHaveFocus());
   });
 
   it('honours initialFocus over the first tabbable element', async () => {

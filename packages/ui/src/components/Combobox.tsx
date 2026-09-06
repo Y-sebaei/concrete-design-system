@@ -9,7 +9,14 @@ import {
   type ReactNode,
 } from 'react';
 import { cn } from '../lib/cn';
-import { Field, controlShell, controlSizes, controlStates, type ControlSize, type FieldOwnProps } from './Field';
+import {
+  Field,
+  controlShell,
+  controlSizes,
+  controlStates,
+  type ControlSize,
+  type FieldOwnProps,
+} from './Field';
 import { Spinner } from './Spinner';
 
 export interface ComboboxOption {
@@ -55,8 +62,7 @@ function defaultFilter(options: ComboboxOption[], query: string): ComboboxOption
   const q = query.trim().toLowerCase();
   if (!q) return options;
   return options.filter(
-    (option) =>
-      option.label.toLowerCase().includes(q) || option.value.toLowerCase().includes(q),
+    (option) => option.label.toLowerCase().includes(q) || option.value.toLowerCase().includes(q),
   );
 }
 
@@ -187,7 +193,9 @@ export function Combobox({
   /* Scroll the active option into view. aria-activedescendant does not. */
   useEffect(() => {
     if (!open || activeIndex < 0) return;
-    const node = listRef.current?.querySelector<HTMLElement>(`#${CSS.escape(optionId(activeIndex))}`);
+    const node = listRef.current?.querySelector<HTMLElement>(
+      `#${CSS.escape(optionId(activeIndex))}`,
+    );
     node?.scrollIntoView({ block: 'nearest' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex, open]);

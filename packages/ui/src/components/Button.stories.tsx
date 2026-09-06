@@ -213,8 +213,8 @@ export const LoadingKeepsWidth: Story = {
           <Button variant="ghost">Cancel</Button>
         </div>
         <p className="cui-prose mt-3 text-text-subtle">
-          Press it. The button holds its width, so Cancel does not move under the pointer, and
-          focus stays on the button that was pressed rather than jumping to the top of the page.
+          Press it. The button holds its width, so Cancel does not move under the pointer, and focus
+          stays on the button that was pressed rather than jumping to the top of the page.
         </p>
       </Card>
     );

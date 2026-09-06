@@ -94,7 +94,12 @@ export const ShortLists: Story = {
       {[1, 3, 7].map((total) => (
         <div key={total}>
           <p className="mb-1.5 font-mono text-[11px] text-text-subtle">{total} pages</p>
-          <Pagination page={1} totalPages={total} onPageChange={() => {}} totalLabel={`${total * 12} events`} />
+          <Pagination
+            page={1}
+            totalPages={total}
+            onPageChange={() => {}}
+            totalLabel={`${total * 12} events`}
+          />
         </div>
       ))}
     </div>

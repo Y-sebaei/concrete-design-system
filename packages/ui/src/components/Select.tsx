@@ -16,7 +16,8 @@ export interface SelectOption {
 }
 
 export interface SelectProps
-  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'className' | 'children'>,
+  extends
+    Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'className' | 'children'>,
     FieldOwnProps {
   size?: ControlSize;
   options: SelectOption[];

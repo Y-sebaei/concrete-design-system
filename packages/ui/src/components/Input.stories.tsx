@@ -4,7 +4,13 @@ import { Input } from './Input';
 const SearchIcon = () => (
   <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true">
     <circle cx="6" cy="6" r="4.25" fill="none" stroke="currentColor" strokeWidth="1.5" />
-    <path d="m9.5 9.5 3 3" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path
+      d="m9.5 9.5 3 3"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
   </svg>
 );
 
@@ -112,8 +118,8 @@ export const Numeric: Story = {
         <Input label="Total" numeric defaultValue="49.80" />
       </div>
       <p className="cui-prose mt-3 text-text-subtle">
-        Numeric fields are right aligned and use tabular figures, so the decimal points line up
-        down the column.
+        Numeric fields are right aligned and use tabular figures, so the decimal points line up down
+        the column.
       </p>
     </div>
   ),
@@ -123,7 +129,12 @@ export const WithIcons: Story = {
   name: 'With icons',
   render: () => (
     <div className="flex max-w-sm flex-col gap-3">
-      <Input label="Search events" labelHidden placeholder="Title or venue" iconStart={<SearchIcon />} />
+      <Input
+        label="Search events"
+        labelHidden
+        placeholder="Title or venue"
+        iconStart={<SearchIcon />}
+      />
       <Input label="Face value" numeric defaultValue="24.00" iconEnd={<span>EUR</span>} />
     </div>
   ),

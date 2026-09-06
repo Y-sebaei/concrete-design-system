@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  type ReactNode,
-  type RefObject,
-} from 'react';
+import { useCallback, useEffect, useId, useRef, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '../lib/cn';
 import { getTabbable, lockScroll } from '../lib/focus';
@@ -199,6 +192,13 @@ export function Modal({
       // The scrim is a sibling concern: this element is the positioning
       // context, and the scrim below is what the click lands on.
     >
+      {/*
+        The scrim is a pointer affordance and nothing else. It is aria-hidden and
+        has no keyboard equivalent because it does not need one: Escape closes
+        the dialog, and the close button is the first element in its tab order.
+        Making the scrim a button would put a control with no accessible name
+        into the tab order in front of the dialog's own content.
+      */}
       <div
         aria-hidden="true"
         onClick={closeOnScrimClick ? onClose : undefined}
@@ -213,6 +213,14 @@ export function Modal({
         )}
       />
 
+      {/*
+        The dialog owns Escape and the Tab wrapping, so the handler belongs on
+        the container rather than on whichever control inside happens to have
+        focus. role="dialog" is not an interactive role, which is what the rule
+        below objects to, and moving the handler onto a child would break the
+        trap the moment the dialog contains nothing focusable.
+      */}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={dialogRef}
         role="dialog"
