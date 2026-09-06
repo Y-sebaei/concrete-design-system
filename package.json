@@ -29,7 +29,8 @@
     "e2e:ui": "playwright test --ui",
     "changeset": "changeset",
     "version": "changeset version && npm install --package-lock-only",
-    "release": "npm run build -w @y-sebaei/concrete-ui && changeset publish"
+    "release": "npm run build -w @y-sebaei/concrete-ui && changeset publish",
+    "check:exports": "node scripts/check-exports.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.10",

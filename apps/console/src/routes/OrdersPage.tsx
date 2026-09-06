@@ -153,8 +153,21 @@ export function OrdersPage() {
       {
         key: 'id',
         header: 'Order',
+        /*
+         * A button, because it opens a dialog rather than navigating. The row
+         * click below does the same thing for a pointer; this is what makes the
+         * order reachable from the keyboard at all. See the note on
+         * Table's onRowActivate.
+         */
         cell: ({ entry }) => (
-          <span className="cui-tnum font-mono text-text">{shortId(entry.orderId)}</span>
+          <button
+            type="button"
+            onClick={() => setSelected(entry.orderId)}
+            className="cui-focus cui-tnum rounded-sm font-mono text-text hover:text-accent-text hover:underline"
+          >
+            <span className="sr-only">Open order </span>
+            {shortId(entry.orderId)}
+          </button>
         ),
       },
       {

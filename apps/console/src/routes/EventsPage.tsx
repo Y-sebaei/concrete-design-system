@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Badge,
   Button,
@@ -157,8 +157,21 @@ export function EventsPage() {
       {
         key: 'title',
         header: 'Event',
+        /*
+         * A real link, not just a row click.
+         *
+         * Table's onRowActivate is a pointer convenience and does not make the
+         * row keyboard operable. Without this link a keyboard user can reach
+         * the sort buttons and the pagination and has no way at all to open an
+         * event, which is the entire job of this screen.
+         */
         cell: (event) => (
-          <span className="block max-w-[28ch] truncate font-medium text-text">{event.title}</span>
+          <Link
+            to={`/events/${event.slug}`}
+            className="cui-focus block max-w-[28ch] truncate rounded-sm font-medium text-text hover:text-accent-text hover:underline"
+          >
+            {event.title}
+          </Link>
         ),
       },
       {

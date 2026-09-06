@@ -7,9 +7,16 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   build: {
     lib: {
-      entry: resolve(import.meta.dirname, 'src/index.ts'),
+      /*
+       * Two entries, because package.json declares two JavaScript exports.
+       * The tokens subpath exists so a consumer can generate their own
+       * semantic layer from the ramps without pulling in every component.
+       */
+      entry: {
+        index: resolve(import.meta.dirname, 'src/index.ts'),
+        'tokens/index': resolve(import.meta.dirname, 'src/tokens/index.ts'),
+      },
       formats: ['es'],
-      fileName: () => 'index.js',
     },
     // React stays external. Bundling it into a component library gives the
     // consumer two copies of React, and the second one has its own hook

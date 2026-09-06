@@ -78,7 +78,11 @@ export default tseslint.config(
   ...storybook.configs['flat/recommended'],
 
   {
+    // Build and check scripts. They run in node and their entire output is
+    // stdout, so console is the interface rather than a leak.
     files: ['**/*.{js,mjs,cjs}'],
     ...tseslint.configs.disableTypeChecked,
+    languageOptions: { globals: { ...globals.node } },
+    rules: { 'no-console': 'off' },
   },
 );

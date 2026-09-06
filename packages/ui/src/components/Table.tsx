@@ -52,6 +52,20 @@ export interface TableProps<Row, K extends string = string> {
   loading?: boolean;
   skeletonRows?: number;
   empty: TableEmptyState;
+  /**
+   * Called when a row is clicked. A pointer convenience, and nothing more.
+   *
+   * It does NOT make the row keyboard operable, and it deliberately does not
+   * try to. Giving the row a tabindex and a key handler would put a tab stop on
+   * every row of the table and announce each one as a button, which on a
+   * twelve-row page is twelve stops that all say the same thing.
+   *
+   * The accessible pattern is a real control inside one cell: a link if it
+   * navigates, a button if it opens something. The row click then duplicates
+   * what that control already does, for people using a mouse. Set this without
+   * providing that control and the table is unusable from the keyboard, which
+   * is exactly the bug this note exists to prevent.
+   */
   onRowActivate?: (row: Row) => void;
   /** Adds the change flash to rows whose id is in this set. */
   flashedRowIds?: ReadonlySet<string>;

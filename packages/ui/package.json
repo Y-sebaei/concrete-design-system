@@ -24,7 +24,8 @@
     "./tokens": {
       "types": "./dist/tokens/index.d.ts",
       "import": "./dist/tokens/index.js"
-    }
+    },
+    "./fonts.css": "./dist/fonts.css"
   },
   "publishConfig": {
     "access": "public"
@@ -47,7 +48,7 @@
     "tokens": "tsx src/tokens/generate.ts",
     "tokens:check": "tsx src/tokens/generate.ts && git diff --exit-code -- src/styles/tokens.css",
     "contrast": "tsx src/tokens/contrast.ts",
-    "build": "npm run tokens && vite build && tsc -p tsconfig.build.json",
+    "build": "npm run tokens && vite build && tsc -p tsconfig.build.json && node scripts/copy-styles.mjs",
     "storybook": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build -o storybook-static"
   },

@@ -91,13 +91,17 @@ jobs:
       - name: Library
         run: npm run build -w @y-sebaei/concrete-ui
 
-      - name: The built package contains what package.json promises
+      # A broken exports map fails no build, test, typecheck or lint. It fails
+      # at npm install in somebody else's project, which is the worst place to
+      # find out, and two subpaths were declared and unbuilt before this ran.
+      - name: Every declared export resolves
+        run: npm run check:exports
+
+      - name: The compiled stylesheet carries both themes
         run: |
-          test -f packages/ui/dist/index.js
-          test -f packages/ui/dist/index.d.ts
-          test -f packages/ui/dist/concrete-ui.css
           grep -q -- '--ui-surface-app' packages/ui/dist/concrete-ui.css
           grep -q 'prefers-color-scheme:dark' packages/ui/dist/concrete-ui.css
+          grep -q 'data-theme=dark' packages/ui/dist/concrete-ui.css
 
       - name: Console
         run: npm run build -w boxoffice-console
