@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { checkA11y } from '../../../../test/axe';
 
 import { Badge } from './Badge';
+import { Banner } from './Banner';
 import { Button } from './Button';
 import { Card, CardBody, CardFooter, CardHeader, CardTitle, CardDescription } from './Card';
 import { Combobox } from './Combobox';
@@ -50,6 +51,28 @@ describe('accessibility, static components', () => {
         <Badge tone="info" shape="pill">
           Live
         </Badge>
+      </div>,
+    );
+    await expectNoViolations(container);
+  });
+
+  it('Banner, every tone and both live roles', async () => {
+    const { container } = render(
+      <div>
+        <Banner tone="info" title="Live inventory is reconnecting">
+          Remaining counts are frozen until the socket is back.
+        </Banner>
+        <Banner tone="warning" title="Search is running degraded" onDismiss={() => {}} />
+        <Banner
+          tone="danger"
+          title="Could not load events"
+          action={<Button size="sm">Retry</Button>}
+        >
+          The API returned 503.
+        </Banner>
+        <Banner tone="success" title="All holds released" />
+        <Banner tone="neutral" title="This event is in the past" announce={false} />
+        <Banner flush tone="warning" title="This console is read only" />
       </div>,
     );
     await expectNoViolations(container);

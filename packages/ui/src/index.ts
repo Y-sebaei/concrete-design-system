@@ -1,6 +1,7 @@
 import './styles/index.css';
 
 export { Badge, type BadgeProps, type BadgeTone, type BadgeShape } from './components/Badge';
+export { Banner, type BannerProps, type BannerTone } from './components/Banner';
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './components/Button';
 export {
   Card,

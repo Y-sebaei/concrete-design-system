@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Badge,
+  Banner,
   Button,
   Combobox,
   Input,
@@ -59,7 +60,16 @@ export function EventsPage() {
 
   /* The search box is uncontrolled by the URL while the operator is typing. */
   const [draftQuery, setDraftQuery] = useState(q);
-  const degradedNotified = useRef(false);
+
+  /*
+   * Whether the last response came from the database rather than Elasticsearch.
+   *
+   * This is state on the page, not a notification, because it is a condition:
+   * it is true of the results currently on screen and stays true until the
+   * stack recovers. It was a toast first, which was the wrong shape. See the
+   * findings list in the README.
+   */
+  const [degraded, setDegraded] = useState(false);
 
   const setParam = useCallback(
     (patch: Record<string, string | null>) => {
@@ -110,22 +120,12 @@ export function EventsPage() {
         setLoading(false);
 
         /*
-         * The API tells us when Elasticsearch was unreachable and it answered
-         * from Postgres instead. That result has no ranking and no fuzzy
-         * matching, and it is indistinguishable from a healthy one on screen,
-         * so the console says it out loud. Once per session, because it is a
-         * condition rather than an event.
+         * The API says which backend answered. A database result has no ranking
+         * and no fuzzy matching and is otherwise indistinguishable from a
+         * healthy one, so it gets a banner above the table for exactly as long
+         * as it is true, and clears itself the moment search recovers.
          */
-        if (next.source === 'database' && !degradedNotified.current) {
-          degradedNotified.current = true;
-          toast({
-            title: 'Search is running degraded',
-            description:
-              'Elasticsearch is unreachable, so results come from the database with no ranking or fuzzy matching.',
-            tone: 'warning',
-            key: 'search-degraded',
-          });
-        }
+        setDegraded(next.source === 'database');
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) return;
@@ -134,14 +134,17 @@ export function EventsPage() {
           error instanceof ApiError
             ? error.operatorMessage
             : 'Something went wrong loading events.';
+        /*
+         * No toast here, deliberately.
+         *
+         * A failed load is not an event that has finished happening; the list
+         * stays unloaded until somebody retries. It gets the banner below, once,
+         * rather than a message that leaves after six seconds and a duplicate in
+         * the table's empty state. The toasts left in this console are all
+         * genuine events: a socket reconnect, an order reaching fulfilment, a
+         * counter sale going through.
+         */
         setFailed(message);
-        toast({
-          title: 'Could not load events',
-          description: message,
-          tone: 'danger',
-          key: 'events-load',
-          action: { label: 'Retry', onClick: () => setParam({ _r: String(Date.now()) }) },
-        });
       });
 
     return () => controller.abort();
@@ -290,28 +293,50 @@ export function EventsPage() {
         </Button>
       </div>
 
-      <Table
-        columns={columns}
-        rows={result?.items ?? []}
-        getRowId={(event) => event.eventId}
-        caption="Events on sale"
-        loading={loading}
-        skeletonRows={PAGE_SIZE}
-        sort={tableSort}
-        onSortChange={(next) => setParam({ sort: sortForColumn[next.key] ?? 'date' })}
-        onRowActivate={(event) => navigate(`/events/${event.slug}`)}
-        empty={
-          failed
-            ? {
-                title: 'The events list could not be loaded',
-                description: failed,
-                action: (
-                  <Button variant="secondary" onClick={() => setParam({ _r: String(Date.now()) })}>
-                    Try again
-                  </Button>
-                ),
-              }
-            : hasFilters
+      {degraded ? (
+        <Banner tone="warning" title="Search is running degraded">
+          Elasticsearch is unreachable, so these results came from the database. There is no ranking
+          and no fuzzy matching, so a misspelled search will find nothing rather than the near miss
+          it would normally find.
+        </Banner>
+      ) : null}
+
+      {failed ? (
+        <Banner
+          tone="danger"
+          title="The events list could not be loaded"
+          action={
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => setParam({ _r: String(Date.now()) })}
+            >
+              Try again
+            </Button>
+          }
+        >
+          {failed}
+        </Banner>
+      ) : null}
+
+      {/*
+        A failed load replaces the table rather than emptying it. An empty table
+        with its headers still showing says "zero results matched", which is a
+        different and untrue statement about the catalogue.
+      */}
+      {failed ? null : (
+        <Table
+          columns={columns}
+          rows={result?.items ?? []}
+          getRowId={(event) => event.eventId}
+          caption="Events on sale"
+          loading={loading}
+          skeletonRows={PAGE_SIZE}
+          sort={tableSort}
+          onSortChange={(next) => setParam({ sort: sortForColumn[next.key] ?? 'date' })}
+          onRowActivate={(event) => navigate(`/events/${event.slug}`)}
+          empty={
+            hasFilters
               ? {
                   title: 'No events match these filters',
                   description:
@@ -333,8 +358,9 @@ export function EventsPage() {
                   description:
                     'No events are published yet. Run npm run seed in the ticketing repo to load the sample catalogue.',
                 }
-        }
-      />
+          }
+        />
+      )}
 
       {result && result.totalPages > 1 ? (
         <Pagination

@@ -1,0 +1,114 @@
+(() => {
+  var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+    get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+  }) : x)(function(x) {
+    if (typeof require !== "undefined") return require.apply(this, arguments);
+    throw Error('Dynamic require of "' + x + '" is not supported');
+  });
+
+  // e2e/modal.spec.ts
+  var import_test = __require("@playwright/test");
+  var STORY = "/iframe.html?id=components-modal--keyboard-only&viewMode=story";
+  async function focusedName(page) {
+    return page.evaluate(() => {
+      const el = document.activeElement;
+      if (!el || el === document.body) return "BODY";
+      return el.getAttribute("aria-label") ?? el.textContent?.trim().replace(/\s+/g, " ").slice(0, 40) ?? el.tagName;
+    });
+  }
+  import_test.test.beforeEach(async ({ page }) => {
+    await page.goto(STORY);
+    await (0, import_test.expect)(page.getByRole("button", { name: "Open dialog" })).toBeVisible();
+  });
+  (0, import_test.test)("opens from the keyboard and moves focus into the dialog", async ({ page }) => {
+    const trigger = page.getByRole("button", { name: "Open dialog" });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    const dialog = page.getByRole("dialog");
+    await (0, import_test.expect)(dialog).toBeVisible();
+    await (0, import_test.expect)(dialog).toHaveAttribute("aria-modal", "true");
+    await (0, import_test.expect)(dialog).toHaveAccessibleName("Refund order 4d1f");
+    await (0, import_test.expect)(page.locator('[role="dialog"] :focus')).toBeFocused();
+  });
+  (0, import_test.test)("Tab cycles inside the dialog and never reaches the page behind", async ({ page }) => {
+    await page.getByRole("button", { name: "Open dialog" }).focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeVisible();
+    const seen = [];
+    for (let i = 0; i < 12; i += 1) {
+      seen.push(await focusedName(page));
+      await page.keyboard.press("Tab");
+      const inside = await page.evaluate(() => {
+        const dialog = document.querySelector('[role="dialog"]');
+        return Boolean(dialog && dialog.contains(document.activeElement));
+      });
+      (0, import_test.expect)(inside, `focus escaped the dialog on press ${i + 1}`).toBe(true);
+    }
+    (0, import_test.expect)(new Set(seen).size).toBeGreaterThan(1);
+  });
+  (0, import_test.test)("Shift+Tab wraps backwards from the first element to the last", async ({ page }) => {
+    await page.getByRole("button", { name: "Open dialog" }).focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeVisible();
+    await (0, import_test.expect)(page.getByRole("button", { name: "Close dialog" })).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await (0, import_test.expect)(page.getByRole("button", { name: "Refund 49.80 EUR" })).toBeFocused();
+  });
+  (0, import_test.test)("Escape closes the dialog and returns focus to the trigger", async ({ page }) => {
+    const trigger = page.getByRole("button", { name: "Open dialog" });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeHidden();
+    await (0, import_test.expect)(trigger).toBeFocused();
+  });
+  (0, import_test.test)("closing with a button inside the dialog also restores focus", async ({ page }) => {
+    const trigger = page.getByRole("button", { name: "Open dialog" });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeVisible();
+    const cancel = page.getByRole("button", { name: "Cancel" });
+    await cancel.focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeHidden();
+    await (0, import_test.expect)(trigger).toBeFocused();
+  });
+  (0, import_test.test)("the control behind the dialog is not reachable while it is open", async ({ page }) => {
+    await page.getByRole("button", { name: "Open dialog" }).focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeVisible();
+    for (let i = 0; i < 10; i += 1) {
+      await page.keyboard.press("Tab");
+      await (0, import_test.expect)(page.getByRole("button", { name: "Behind the dialog" })).not.toBeFocused();
+    }
+  });
+  (0, import_test.test)("page scroll is locked while open and restored on close", async ({ page }) => {
+    const overflow = () => page.evaluate(() => document.body.style.overflow);
+    (0, import_test.expect)(await overflow()).toBe("");
+    await page.getByRole("button", { name: "Open dialog" }).focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeVisible();
+    (0, import_test.expect)(await overflow()).toBe("hidden");
+    await page.keyboard.press("Escape");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeHidden();
+    (0, import_test.expect)(await overflow()).toBe("");
+  });
+  (0, import_test.test)("the focus ring is actually drawn on the focused control", async ({ page }) => {
+    await page.getByRole("button", { name: "Open dialog" }).focus();
+    await page.keyboard.press("Enter");
+    await (0, import_test.expect)(page.getByRole("dialog")).toBeVisible();
+    const ring = await page.evaluate(() => {
+      const el = document.activeElement;
+      const style = getComputedStyle(el);
+      return {
+        outlineColor: style.outlineColor,
+        outlineWidth: style.outlineWidth,
+        boxShadow: style.boxShadow
+      };
+    });
+    (0, import_test.expect)(ring.outlineColor).not.toBe("rgba(0, 0, 0, 0)");
+    (0, import_test.expect)(parseFloat(ring.outlineWidth)).toBeGreaterThan(0);
+    (0, import_test.expect)(ring.boxShadow).not.toBe("none");
+  });
+})();

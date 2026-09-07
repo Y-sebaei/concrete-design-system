@@ -173,8 +173,8 @@ A component that lets you ship "No data" will get shipped with "No data".
 
 ## Components
 
-Button, Input, Select, Combobox, Modal, Toast, Table, Pagination, Tabs, Badge,
-Card, Skeleton.
+Button, Input, Select, Combobox, Modal, Toast, Banner, Table, Pagination, Tabs,
+Badge, Card, Skeleton.
 
 Two are worth calling out because the pattern is the point.
 
@@ -184,6 +184,11 @@ from the browser chrome with a document-level `focusin` listener, and restores
 focus on close, falling back to `body` if the trigger has since been unmounted.
 Scroll locking is reference counted, so two overlapping overlays cannot leave
 the page permanently unscrollable.
+
+**Banner** and **Toast** split on one distinction. A toast reports an event:
+something happened, you may have missed it, here it is for six seconds. A banner
+reports a state that is true right now and stays on screen until it stops being
+true. The test is whether the message is still true in a minute.
 
 **Combobox** is an editable combobox with list autocomplete. `role="combobox"`
 is on the input, not a wrapper, which changed in ARIA 1.2 and is the most common
@@ -225,7 +230,7 @@ npm run lint
 npm run typecheck
 ```
 
-220 unit, accessibility and token tests. 110 contrast pairs. 20 Playwright
+229 unit, accessibility and token tests. 110 contrast pairs. 20 Playwright
 tests. CI runs all of it plus a build of the published package.
 
 Accessibility is checked three ways, because each catches what the others
@@ -282,16 +287,21 @@ recording as the reason the Orders screen holds a socket subscription per row.
 
 ### The library
 
-**5. No inline banner, and the degraded-search notice went to a Toast instead.**
-When Elasticsearch is unreachable the API answers from Postgres and says so in
-`source`. That is a _condition_, not an event: it stays true until the stack
-recovers, and a toast that disappears after six seconds is the wrong shape for
-it.
+**5. No inline banner, and the degraded-search notice went to a Toast instead.
+Fixed.** When Elasticsearch is unreachable the API answers from Postgres and
+says so in `source`. That is a _condition_, not an event: it stays true until
+the stack recovers, and a toast that disappears after six seconds is the wrong
+shape for it. The operator spent the rest of the session looking at unranked
+results with nothing on screen to say so.
 
-_Decided:_ accept the gap for now and use a keyed toast, which at least does not
-stack. **This is the strongest case for the next component.** An inline banner
-that persists and can be dismissed is missing, and the workaround is visibly
-wrong rather than merely inelegant.
+_Decided:_ this was the one finding worth acting on rather than recording, so
+`Banner` now exists and the console uses it. Working on it surfaced a second
+problem in the same screen: a failed load was reporting itself three times, in a
+toast, in a banner and in the table's empty state. A failed load is a standing
+condition too, so it now gets the banner alone, and the table is not rendered at
+all rather than showing empty headers that assert zero results matched. The
+toasts left in the console are all genuine events: a socket reconnect, an order
+reaching fulfilment, a counter sale going through.
 
 **6. No stat tile.** Capacity, Sold and Remaining on the event detail screen are
 hand-built from `Card` plus a label and a number.

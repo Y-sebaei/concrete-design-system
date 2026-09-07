@@ -282,3 +282,22 @@ to gain a name.
 documentation and the empty states beautifully and appears almost nowhere else,
 because an operator console is not a reading surface. The pairing is right for
 the library and slightly oversized for its first consumer.
+
+## What the console asked for and got
+
+The library shipped without an inline banner, and the console had to put a
+degraded-search notice into a toast. That was the first entry in the README
+findings list and the only one judged worth acting on rather than recording,
+because the workaround was visibly wrong rather than merely inelegant: the
+message was gone six seconds later while still being true.
+
+`Banner` is the result, and the split it forces is now stated in both
+components' documentation. A toast reports an event. A banner reports a state.
+The test is whether the message is still true in a minute.
+
+Building it exposed a second problem on the same screen. A failed load was
+reporting itself three times over, in a toast, in the new banner, and in the
+table's empty state. It is a standing condition too, so it now gets the banner
+alone, and the table is not rendered at all rather than showing its headers over
+nothing, which asserts that zero results matched. That is a different and untrue
+statement about the catalogue.
