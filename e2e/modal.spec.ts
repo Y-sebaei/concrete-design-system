@@ -142,18 +142,26 @@ test('the focus ring is actually drawn on the focused control', async ({ page })
    * A trap that moves focus correctly but draws nothing is still unusable, and
    * it is invisible to every assertion above. This checks the ring exists: a
    * non-transparent outline plus the inner band drawn as a box-shadow.
+   *
+   * Polled rather than sampled once. The ring transitions its outline colour in
+   * over 100ms from transparent, so a single read taken the instant focus lands
+   * legitimately sees rgba(0, 0, 0, 0) and fails. That happened on CI, passed on
+   * the retry, and a retry-masked flake is a failure nobody ever looks at.
    */
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const style = getComputedStyle(document.activeElement as HTMLElement);
+        return style.outlineColor;
+      }),
+    )
+    .not.toBe('rgba(0, 0, 0, 0)');
+
   const ring = await page.evaluate(() => {
-    const el = document.activeElement as HTMLElement;
-    const style = getComputedStyle(el);
-    return {
-      outlineColor: style.outlineColor,
-      outlineWidth: style.outlineWidth,
-      boxShadow: style.boxShadow,
-    };
+    const style = getComputedStyle(document.activeElement as HTMLElement);
+    return { outlineWidth: style.outlineWidth, boxShadow: style.boxShadow };
   });
 
-  expect(ring.outlineColor).not.toBe('rgba(0, 0, 0, 0)');
   expect(parseFloat(ring.outlineWidth)).toBeGreaterThan(0);
   expect(ring.boxShadow).not.toBe('none');
 });
