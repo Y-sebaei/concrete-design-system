@@ -16,7 +16,7 @@ import {
   Table,
   useToast,
   type TableColumn,
-} from '@y-sebaei/concrete-ui';
+} from '@ysebaei/concrete-ui';
 import { ApiError, api, localSessionId, type EventDetail, type TicketType } from '../lib/api';
 import { subscribeToEvent, type InventoryChanged } from '../lib/socket';
 import { orderRegistry } from '../lib/orderRegistry';

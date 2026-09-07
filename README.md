@@ -15,7 +15,7 @@ authoring practices rather than wrapped around a headless library.
   scales, the spacing ramp and the motion tokens as live specimens.
 
 ```
-packages/ui        @y-sebaei/concrete-ui, the published package
+packages/ui        @ysebaei/concrete-ui, the published package
 apps/console       boxoffice-console, a client for the event ticketing API
 e2e                keyboard-only Playwright runs against a built Storybook
 ```
@@ -23,13 +23,13 @@ e2e                keyboard-only Playwright runs against a built Storybook
 ## Install
 
 ```bash
-npm install @y-sebaei/concrete-ui
+npm install @ysebaei/concrete-ui
 ```
 
 React 18 is a peer dependency. Import the stylesheet once, at your entry point:
 
 ```ts
-import '@y-sebaei/concrete-ui/styles.css';
+import '@ysebaei/concrete-ui/styles.css';
 ```
 
 That is the whole setup. The package ships compiled CSS, so **Tailwind is not
@@ -39,14 +39,14 @@ Tailwind entry as well:
 
 ```css
 @import 'tailwindcss';
-@import '@y-sebaei/concrete-ui/tokens.css';
+@import '@ysebaei/concrete-ui/tokens.css';
 ```
 
 The two typefaces are a separate optional import, so you can self-host them
 instead:
 
 ```ts
-import '@y-sebaei/concrete-ui/fonts.css';
+import '@ysebaei/concrete-ui/fonts.css';
 ```
 
 ## Theming
@@ -83,11 +83,11 @@ Both themes have to be set. That is deliberate: the point of the system is that
 a role is bound once per theme, and a consumer who rebinds only light gets a
 dark theme that has silently stopped matching.
 
-`@y-sebaei/concrete-ui/tokens` exports the ramps, the scales and the contrast
+`@ysebaei/concrete-ui/tokens` exports the ramps, the scales and the contrast
 helpers if you would rather generate your own layer from them:
 
 ```ts
-import { tokens } from '@y-sebaei/concrete-ui';
+import { tokens } from '@ysebaei/concrete-ui';
 
 tokens.contrastRatio(
   tokens.resolve(tokens.light.text),
@@ -102,7 +102,7 @@ This is the events table from the console, trimmed but not rewritten. The whole
 screen is library components.
 
 ```tsx
-import { Badge, Pagination, Table, type TableColumn } from '@y-sebaei/concrete-ui';
+import { Badge, Pagination, Table, type TableColumn } from '@ysebaei/concrete-ui';
 import { Link } from 'react-router-dom';
 
 const columns: TableColumn<EventDocument>[] = [

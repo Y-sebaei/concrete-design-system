@@ -4,7 +4,7 @@
     "noEmit": true,
     "types": ["vite/client"],
     "paths": {
-      "@y-sebaei/concrete-ui": ["../../packages/ui/src/index.ts"]
+      "@ysebaei/concrete-ui": ["../../packages/ui/src/index.ts"]
     }
   },
   "include": ["src", "vite.config.ts", "e2e"]

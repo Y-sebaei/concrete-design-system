@@ -15,7 +15,7 @@ import {
   useToast,
   type BadgeTone,
   type TableColumn,
-} from '@y-sebaei/concrete-ui';
+} from '@ysebaei/concrete-ui';
 import { ApiError, api, type Order, type OrderStatus } from '../lib/api';
 import { orderRegistry, type RegisteredOrder } from '../lib/orderRegistry';
 import { subscribeToOrder } from '../lib/socket';

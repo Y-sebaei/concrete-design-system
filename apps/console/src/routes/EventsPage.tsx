@@ -12,7 +12,7 @@ import {
   useToast,
   type SortState,
   type TableColumn,
-} from '@y-sebaei/concrete-ui';
+} from '@ysebaei/concrete-ui';
 import { ApiError, api, type EventDocument, type EventSort, type SearchResult } from '../lib/api';
 import { money, when } from '../lib/format';
 

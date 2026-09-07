@@ -89,7 +89,7 @@ jobs:
       # Proves the published artefact, which the console does not: the console
       # consumes the library by source through a workspace alias.
       - name: Library
-        run: npm run build -w @y-sebaei/concrete-ui
+        run: npm run build -w @ysebaei/concrete-ui
 
       # A broken exports map fails no build, test, typecheck or lint. It fails
       # at npm install in somebody else's project, which is the worst place to

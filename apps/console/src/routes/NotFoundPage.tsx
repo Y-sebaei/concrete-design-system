@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardDescription, CardHeader, CardTitle } from '@y-sebaei/concrete-ui';
+import { Card, CardBody, CardDescription, CardHeader, CardTitle } from '@ysebaei/concrete-ui';
 
 export function NotFoundPage() {
   return (

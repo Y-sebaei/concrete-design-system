@@ -1,4 +1,4 @@
-# @y-sebaei/concrete-ui
+# @ysebaei/concrete-ui
 
 ## 0.1.0
 

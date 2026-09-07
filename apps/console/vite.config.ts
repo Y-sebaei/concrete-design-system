@@ -17,10 +17,10 @@ export default defineConfig({
        * dependency while developing.
        *
        * The published path is proven separately: `npm run build -w
-       * @y-sebaei/concrete-ui` emits dist/index.js plus dist/concrete-ui.css,
+       * @ysebaei/concrete-ui` emits dist/index.js plus dist/concrete-ui.css,
        * and CI builds it on every push.
        */
-      '@y-sebaei/concrete-ui': resolve(uiSrc, 'index.ts'),
+      '@ysebaei/concrete-ui': resolve(uiSrc, 'index.ts'),
     },
   },
   server: { port: 5174 },

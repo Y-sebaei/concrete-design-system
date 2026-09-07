@@ -18,7 +18,7 @@ turned out to be wrong once it was on screen, is in the
 ## Install
 
 ```bash
-npm install @y-sebaei/concrete-ui
+npm install @ysebaei/concrete-ui
 ```
 
 React 18 is a peer dependency, and the package is **ESM only**: it declares no
@@ -27,7 +27,7 @@ React 18 is a peer dependency, and the package is **ESM only**: it declares no
 current bundler is fine. Import the stylesheet once, at your entry point:
 
 ```ts
-import '@y-sebaei/concrete-ui/styles.css';
+import '@ysebaei/concrete-ui/styles.css';
 ```
 
 That is the whole setup. The package ships compiled CSS, so **Tailwind is not
@@ -37,14 +37,14 @@ Tailwind entry as well:
 
 ```css
 @import 'tailwindcss';
-@import '@y-sebaei/concrete-ui/tokens.css';
+@import '@ysebaei/concrete-ui/tokens.css';
 ```
 
 The two typefaces, Schibsted Grotesk and Newsreader, are a separate optional
 import so you can self-host them instead:
 
 ```ts
-import '@y-sebaei/concrete-ui/fonts.css';
+import '@ysebaei/concrete-ui/fonts.css';
 ```
 
 ## Theming
@@ -81,13 +81,13 @@ Both themes have to be set. That is deliberate: a role is bound once per theme,
 and a consumer who rebinds only light gets a dark theme that has quietly stopped
 matching.
 
-`@y-sebaei/concrete-ui/tokens` exports the ramps, the scales and the contrast
+`@ysebaei/concrete-ui/tokens` exports the ramps, the scales and the contrast
 helpers if you would rather generate your own layer from them.
 
 ## Usage
 
 ```tsx
-import { Badge, Banner, Pagination, Table, type TableColumn } from '@y-sebaei/concrete-ui';
+import { Badge, Banner, Pagination, Table, type TableColumn } from '@ysebaei/concrete-ui';
 
 const columns: TableColumn<Event>[] = [
   {

@@ -4,7 +4,7 @@
     {
       "name": "storybook",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "storybook", "-w", "@y-sebaei/concrete-ui"],
+      "runtimeArgs": ["run", "storybook", "-w", "@ysebaei/concrete-ui"],
       "port": 6006
     },
     {

@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Badge, cn, useToast } from '@y-sebaei/concrete-ui';
+import { Badge, cn, useToast } from '@ysebaei/concrete-ui';
 import { getSocket, type ConnectionState } from '../lib/socket';
 
 /* -------------------------------------------------------------------------- */
