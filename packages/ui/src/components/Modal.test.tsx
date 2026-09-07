@@ -156,6 +156,78 @@ describe('Modal', () => {
     await waitFor(() => expect(trigger).toHaveFocus());
   });
 
+  it('closes on Escape while focus is still outside the dialog', async () => {
+    /*
+     * The regression this locks down, and the reason it is written this way.
+     *
+     * Escape used to be handled by a keydown listener on the dialog element,
+     * which only fires once focus is inside it. Focus is moved in on the next
+     * animation frame, so there is a window between the dialog mounting and
+     * that frame in which the keypress lands on whatever had focus before,
+     * usually the trigger, and the dialog never sees it. Escape does nothing.
+     *
+     * It passed on a fast machine and failed on a loaded CI runner, which is
+     * how it reached main.
+     *
+     * Simply pressing Escape quickly does not reproduce it under jsdom, because
+     * the frame fires before userEvent gets to the keypress. Holding the frame
+     * open makes the window deterministic rather than a matter of timing, which
+     * is what a regression test for a race has to do.
+     */
+    const heldFrame = vi
+      .spyOn(window, 'requestAnimationFrame')
+      .mockImplementation(() => 0 as unknown as number);
+
+    try {
+      const user = userEvent.setup();
+      render(<Harness />);
+      const trigger = screen.getByRole('button', { name: 'Open order' });
+
+      await user.click(trigger);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      // The frame never ran, so focus is still on the trigger, outside.
+      expect(trigger).toHaveFocus();
+
+      await user.keyboard('{Escape}');
+
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      expect(document.body.style.overflow).toBe('');
+    } finally {
+      heldFrame.mockRestore();
+    }
+  });
+
+  it('lets a control inside the dialog keep its own Escape', async () => {
+    /*
+     * A combobox closes its listbox on Escape and calls preventDefault. The
+     * document listener has to respect that, or one keypress closes the listbox
+     * and the dialog behind it at the same time.
+     */
+    function WithInnerEscape() {
+      const [open, setOpen] = useState(true);
+      return (
+        <Modal open={open} onClose={() => setOpen(false)} title="Outer">
+          <input
+            aria-label="Swallows escape"
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') event.preventDefault();
+            }}
+          />
+        </Modal>
+      );
+    }
+
+    const user = userEvent.setup();
+    render(<WithInnerEscape />);
+
+    const field = await screen.findByLabelText('Swallows escape');
+    field.focus();
+    await user.keyboard('{Escape}');
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
   it('does not close on a scrim click when the caller opts out', async () => {
     const user = userEvent.setup();
     render(<Harness closeOnScrimClick={false} />);

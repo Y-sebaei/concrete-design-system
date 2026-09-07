@@ -32,6 +32,16 @@ const sizes = {
   lg: 'max-w-3xl',
 } as const;
 
+/**
+ * Every dialog currently open, oldest first.
+ *
+ * Escape is handled on the document rather than on the dialog element, so
+ * something has to decide which dialog a keypress belongs to. It is the last
+ * one opened. Stacking dialogs is discouraged, but the scroll lock already
+ * survives it and this is what stops one Escape closing all of them.
+ */
+const openDialogs: string[] = [];
+
 /*
  * TOKENS THIS COMPONENT READS
  *
@@ -87,15 +97,9 @@ export function Modal({
   const titleId = `${baseId}-title`;
   const descriptionId = `${baseId}-description`;
 
-  /* Escape, and Tab wrapping. */
+  /* Tab wrapping. Escape is handled on the document, see below. */
   const onKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === 'Escape') {
-        event.stopPropagation();
-        onClose();
-        return;
-      }
-
       if (event.key !== 'Tab') return;
 
       const dialog = dialogRef.current;
@@ -122,7 +126,9 @@ export function Modal({
         first.focus();
       }
     },
-    [onClose],
+    // Nothing from props: this handler only reads the live DOM. onClose left
+    // when Escape moved to the document listener.
+    [],
   );
 
   /* Open and close: store focus, move it in, lock scroll, put it back. */
@@ -159,7 +165,49 @@ export function Modal({
   }, [open, initialFocus]);
 
   /*
-   * The backstop.
+   * ESCAPE, ON THE DOCUMENT RATHER THAN ON THE DIALOG
+   *
+   * This started on the dialog element and was wrong, in a way that only showed
+   * up on a slower machine. A keydown handler on the dialog only ever fires
+   * when focus is already inside it, and focus is moved in on the next animation
+   * frame. Press Escape faster than one frame after opening, which a CI runner
+   * under load does routinely and an impatient person does occasionally, and the
+   * keypress lands on body, the dialog never sees it, and Escape does nothing.
+   *
+   * Two guards:
+   *
+   *   defaultPrevented   a control inside the dialog has already dealt with the
+   *                      key. An open Combobox calls preventDefault on Escape to
+   *                      close its listbox, and without this check that one
+   *                      keypress would close the listbox and the dialog behind
+   *                      it in a single stroke.
+   *
+   *   the stack          only the dialog opened last responds, so one Escape
+   *                      closes one dialog.
+   */
+  useEffect(() => {
+    if (!open) return;
+
+    openDialogs.push(baseId);
+
+    function onEscape(event: KeyboardEvent) {
+      if (event.key !== 'Escape') return;
+      if (event.defaultPrevented) return;
+      if (openDialogs[openDialogs.length - 1] !== baseId) return;
+      onClose();
+    }
+
+    document.addEventListener('keydown', onEscape);
+
+    return () => {
+      document.removeEventListener('keydown', onEscape);
+      const index = openDialogs.lastIndexOf(baseId);
+      if (index !== -1) openDialogs.splice(index, 1);
+    };
+  }, [open, baseId, onClose]);
+
+  /*
+   * The focus backstop.
    *
    * Tab handling covers keyboard movement inside the page. It does not cover
    * focus arriving from outside it, which is what happens when somebody tabs
