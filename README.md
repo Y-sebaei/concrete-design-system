@@ -53,16 +53,10 @@ import '@y-sebaei/concrete-ui/fonts.css';
 
 Three states, because that is what a real preference control needs.
 
-```html
-<html>
-  <!-- follows the operating system -->
-  <html data-theme="light">
-    <!-- pinned light -->
-    <html data-theme="dark">
-      <!-- pinned dark -->
-    </html>
-  </html>
-</html>
+```text
+<html>                       follows the operating system
+<html data-theme="light">    pinned light
+<html data-theme="dark">     pinned dark
 ```
 
 Nothing else is required. `bg-surface-app` resolves to
