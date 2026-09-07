@@ -215,6 +215,19 @@ cd ../concrete-design-system && npm run dev:console   # port 5174
 
 Point it elsewhere with `VITE_API_URL`.
 
+### A note if you keep this inside OneDrive
+
+OneDrive dehydrates files it has synced into cloud placeholders, and some tools
+enumerate a directory without hydrating what they find. Playwright silently
+reported "No tests found" for two spec files that `grep`, `esbuild` and every
+editor could read perfectly well; a byte-identical copy under a new name was
+discovered immediately. Rewriting the file in place fixes it until OneDrive
+dehydrates it again.
+
+Nothing in the repository works around this, because it is not a repository
+problem and CI never sees it. If a tool insists a file is not there, check
+whether it is a placeholder before believing it.
+
 To watch live inventory arrive over the socket, open an event and run
 `node scripts/demo-checkout.mjs` in the ticketing repo. The remaining count
 changes without a refresh, the row flashes, and the change is announced.
